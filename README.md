@@ -4,7 +4,7 @@
 </h1>
 <p align="center">
  <a href="https://github.com/ngr-tc/swift-rtc-examples/actions">
-  <img src="https://github.com/ngr-tc/swift-rtc-examples/workflows/build&test/badge.svg">
+  <img src="https://github.com/ngr-tc/swift-rtc-examples/workflows/build/badge.svg">
  </a>
  <a href="https://github.com/ngr-tc/swift-rtc-examples/releases/latest">
   <img src="https://img.shields.io/github/v/release/ngr-tc/swift-rtc-examples?sort=semver">
