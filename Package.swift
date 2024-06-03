@@ -27,7 +27,7 @@ let package = Package(
     products: [],
     dependencies: [
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-        .package(url: "https://github.com/ngr-tc/swift-rtc.git", branch: "master"),
+        .package(url: "https://github.com/ngr-tc/swift-rtc.git", from: "0.3.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/swift-extras/swift-extras-base64.git", from: "1.0.0"),
     ],
