@@ -15,7 +15,7 @@ import NIOCore
 //===----------------------------------------------------------------------===//
 import STUN
 
-// swift run XExampleStunDecode AAEAHCESpEJML0JTQWsyVXkwcmGALwAWaHR0cDovL2xvY2FsaG9zdDozMDAwLwAA
+// swift run StunDecode AAEAHCESpEJML0JTQWsyVXkwcmGALwAWaHR0cDovL2xvY2FsaG9zdDozMDAwLwAA
 // Binding request l=28 attrs=1 id=TC9CU0FrMlV5MHJh
 
 @main

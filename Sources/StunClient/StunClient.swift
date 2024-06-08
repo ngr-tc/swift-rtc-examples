@@ -16,7 +16,7 @@ import NIOPosix
 import STUN
 import Shared
 
-// swift run XExampleStunClient stun.l.google.com 19302 0
+// swift run StunClient stun.l.google.com 19302 0
 // Local address: 0.0.0.0:58998
 // Local address: [IPv4]0.0.0.0/0.0.0.0:51344, Remote addres: [IPv4]stun.l.google.com/74.125.250.129:19302
 // Got response: [IPv4]24.130.67.207:51344
@@ -48,10 +48,14 @@ private final class StunClientHandler: ChannelInboundHandler {
             client = ClientBuilder().build(
                 local: localAddress, remote: remoteAddress, proto: TransportProtocol.udp)
 
+            let transport = TransportContext(
+                local: localAddress, peer: remoteAddress, proto: TransportProtocol.udp)
+
             var msg = Message()
             try msg.build([TransactionId(), bindingRequest])
-            try client?.handleWrite(msg)
-            while let transmit = client?.pollTransmit() {
+            let rin = Transmit(now: NIODeadline.now(), transport: transport, message: msg)
+            try client?.handleWrite(rin)
+            while let transmit = client?.pollWrite() {
                 // Forward the data.
                 let envelope = AddressedEnvelope<ByteBuffer>(
                     remoteAddress: remoteAddress, data: transmit.message)
@@ -65,13 +69,22 @@ private final class StunClientHandler: ChannelInboundHandler {
 
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
         let envelope = self.unwrapInboundIn(data)
-        let byteBuffer = ByteBufferView(envelope.data)
 
         do {
-            try client?.handleRead(byteBuffer)
+            let remoteAddress = try self.remoteAddressInitializer()
+            let localAddress = context.localAddress!
+
+            let transport = TransportContext(
+                local: localAddress, peer: remoteAddress, proto: TransportProtocol.udp)
+            let rin = Transmit(now: NIODeadline.now(), transport: transport, message: envelope.data)
+
+            try client?.handleRead(rin)
 
             if let event = client?.pollEvent() {
-                guard case .success(var msg) = event.result else {
+                guard case .agentEvent(let agentEvent) = event else {
+                    return
+                }
+                guard case .success(var msg) = agentEvent.result else {
                     return
                 }
                 var xorAddr = XorMappedAddress()
@@ -79,7 +92,7 @@ private final class StunClientHandler: ChannelInboundHandler {
                 print("Got response: \(xorAddr)")
             }
 
-            try client?.handleClose()
+            try client?.handleEvent(Event.close)
         } catch let err {
             print("\(err)")
         }

@@ -27,7 +27,7 @@ let package = Package(
     products: [],
     dependencies: [
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-        .package(url: "https://github.com/ngr-tc/swift-rtc.git", from: "0.3.0"),
+        .package(url: "https://github.com/ngr-tc/swift-rtc.git", revision: "0797b21e63c5630e19cc072a8f34b05c0f54bf70"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/swift-extras/swift-extras-base64.git", from: "1.0.0"),
     ],
@@ -37,7 +37,7 @@ let package = Package(
         // MARK: - Tests
 
         // MARK: - Examples
-        .executableTarget(name: "XExampleStunClient",
+        .executableTarget(name: "StunClient",
             dependencies: [
                 .product(name: "STUN", package: "swift-rtc"),
                 .product(name: "Shared", package: "swift-rtc"),
@@ -45,7 +45,7 @@ let package = Package(
                 .product(name: "NIOPosix", package: "swift-nio"),
             ]
         ),
-        .executableTarget(name: "XExampleStunDecode",
+        .executableTarget(name: "StunDecode",
             dependencies: [
                 .product(name: "STUN", package: "swift-rtc"),
                 .product(name: "NIOCore", package: "swift-nio"),
